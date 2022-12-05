@@ -1,25 +1,42 @@
 import logo from './logo.svg';
 import './App.css';
+import { DataStore, Auth } from 'aws-amplify';
+import { Item, Materials, Basket } from "./models";
+import React from 'react'
+import { withAuthenticator} from '@aws-amplify/ui-react';
+console.log('Hello')
+
 
 function App() {
+
+  async function getItem(){
+
+    const transaction = await DataStore.query(Item);
+    
+    console.log(transaction)
+  }
+
+  getItem()
+
+  
+
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <div className='actionBar1'>
+      <div className="searchBar" />
+      <div className="addProductButton">
+        Add Product
+      </div>
+      </div>
+
+
+      <div className="productList" />
+      
     </div>
+     
   );
 }
 
-export default App;
+export default withAuthenticator(App);
