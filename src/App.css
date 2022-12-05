@@ -1,17 +1,46 @@
 .App {
+  display: flex;
   text-align: center;
   width: 100%;
   height: 100%;
   background-color: #ffffff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly
 }
 
+.oxiLogo{
+  width: 100px;
+  height: 100px;
+}
+
+.pageItems{
+  width: 100%;
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+}
 
 .searchBar {
-  width: 500px;
+  display: flex;
+  width: 450px;
   height: 50px;
   background: rgb(255, 255, 255);
   border: 2px solid #E0E0E0;
   border-radius: 30px;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15px;
+
+}
+
+.refreshButton {
+  width: 50px;
+  height: 50px;
+  background: #E0E0E0;
 }
 
 .addProductButton {
@@ -19,6 +48,7 @@
   width: 200px;
   height: 50px;
   background: #00C2FF;
+  border: 2px solid #00C2FF;
   border-radius: 30px;
   justify-content: center;
   align-items: center;
@@ -26,12 +56,15 @@
 }
 
 .productList {
-  display: inline-flex;
+  display: flex;
   width: 80%;
-  height: 800px;
+  height: 80%;
   background: rgb(255, 255, 255);
   border: 2px solid #E0E0E0;
   border-radius: 30px;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 }
 
 .actionBar1 {
@@ -39,4 +72,17 @@
   flex-direction: row;
   width: 80%;
   justify-content: space-between;
+}
+
+table {
+  width: 100%;
+  height: 100%;
+}
+  
+th {
+  border-bottom: 1px solid black;
+}
+  
+td {
+  text-align: center;
 }
