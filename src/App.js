@@ -1,100 +1,52 @@
-import logo from './logo.png';
+import React, { Component } from 'react';
+import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom';
+import Home from './Home';
+import AddProduct from './AddProduct';
+import AddMaterial from './AddMaterial';
 import './App.css';
-import { DataStore, Auth } from 'aws-amplify';
-import { Item, Materials, Basket } from "./models";
-import {React, useState} from 'react'
-import { Button, withAuthenticator} from '@aws-amplify/ui-react';
-import { FiSearch } from 'react-icons/fi';
-
-// Example of a data array that
-// you might receive from an API
-const data = [
-  { name: "Anom", age: 19, gender: "Male" },
-  { name: "Megha", age: 19, gender: "Female" },
-  { name: "Subham", age: 25, gender: "Male"},
-]
-
-
-
-function App() {
-
-  const [items, updateItems] = useState(null);
-  const [barcode, updateBarcode] = useState(null);
-  const [name, updateName] = useState(null);
-  const [manufacturer, updateManufacturer] = useState(null);
-  const [carbon, updateCarbon] = useState(null);
-
-  async function getItems(){
-
-    const items = (await DataStore.query(Item));
-    updateItems(items)
-    const barcode = items.map((p) => p.Barcode)
-    updateBarcode(barcode)
-    const name = items.map((p) => p.Name).toString()
-    updateName(name)
-    const manufacturer = items.map((p) => p.Merchant).toString()
-    updateManufacturer(manufacturer)
-    const carbon = items.map((p) => p.Carbon).toString()
-    updateCarbon(carbon)
-
-  }
-
-
-
-  console.log(barcode)
-
+import AddLogistic from './AddLogistic';
+import AddProcess from './AddProcess';
+import PreProduct from './PreProduct';
   
+class App extends Component {
+  render() {
+    return (
+       <Router>
+           <div className="App">
+            <ul className="App-header">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/AddProduct">AddProduct</Link>
+              </li>
+              <li>
+                <Link to="/AddMaterial">AddMaterial</Link>
+              </li>
+              <li>
+                <Link to="/AddLogistic">AddLogistic</Link>
+              </li>
+              <li>
+                <Link to="/AddProcess">AddProcess</Link>
+              </li>
+              <li>
+                <Link to="/PreProduct">PreProduct</Link>
+              </li>
+            </ul>
+           <Routes>
+                 <Route exact path='/' element={< Home />}></Route>
+                 <Route exact path='/AddProduct' element={< AddProduct />}></Route>
+                 <Route exact path='/AddMaterial' element={< AddMaterial />}></Route>
+                 <Route exact path='/AddLogistic' element={< AddLogistic />}></Route>
+                 <Route exact path='/AddProcess' element={< AddProcess />}></Route>
+                 <Route exact path='/PreProduct' element={< PreProduct />}></Route>
 
-  
-  return (
-    <div className="App">
 
-      <img src={logo} className='oxiLogo'/>
-
-
-      <div className='pageItems'>
-        <div className='actionBar1'>
-          <div className="searchBar" > <FiSearch color='#00C2FF'/> </div>
-
-          <button className='refreshButton' onClick={()=> getItems()}>R</button>
-          <div className="addProductButton">
-            Add Product
+          </Routes>
           </div>
-        </div>
-
-        <div className="productList">
-
-        <table>
-        <tr>
-          <th>Barcode</th>
-          <th>Name</th>
-          <th>Manufacturer</th>
-          <th>Carbon</th>
-        </tr>
-
-
-        {data.map((val, key) => {
-          return (
-            <tr key={key}>
-              <td>{barcode}</td>
-              <td>{val.age}</td>
-              <td>{val.gender}</td>
-            </tr>
-          )
-
-
-        })}
-      </table>
-
-
-        </div>
-
-
-      </div>
-      
-    </div>
-     
-  );
+       </Router>
+   );
+  }
 }
-
-export default withAuthenticator(App);
+  
+export default App;

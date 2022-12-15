@@ -7,11 +7,11 @@
 /* eslint-disable */
 import * as React from "react";
 import { fetchByPath, validateField } from "./utils";
-import { Item } from "../models";
+import { RawMaterials } from "../models";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
-export default function ItemCreateForm(props) {
+export default function RawMaterialsCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -25,28 +25,26 @@ export default function ItemCreateForm(props) {
   } = props;
   const initialValues = {
     Barcode: undefined,
-    Name: undefined,
-    Manufcturer: undefined,
+    Material: undefined,
+    Mass: undefined,
     Carbon: undefined,
   };
   const [Barcode, setBarcode] = React.useState(initialValues.Barcode);
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Manufcturer, setManufcturer] = React.useState(
-    initialValues.Manufcturer
-  );
+  const [Material, setMaterial] = React.useState(initialValues.Material);
+  const [Mass, setMass] = React.useState(initialValues.Mass);
   const [Carbon, setCarbon] = React.useState(initialValues.Carbon);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setBarcode(initialValues.Barcode);
-    setName(initialValues.Name);
-    setManufcturer(initialValues.Manufcturer);
+    setMaterial(initialValues.Material);
+    setMass(initialValues.Mass);
     setCarbon(initialValues.Carbon);
     setErrors({});
   };
   const validations = {
     Barcode: [],
-    Name: [],
-    Manufcturer: [],
+    Material: [],
+    Mass: [],
     Carbon: [],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -68,8 +66,8 @@ export default function ItemCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           Barcode,
-          Name,
-          Manufcturer,
+          Material,
+          Mass,
           Carbon,
         };
         const validationResponses = await Promise.all(
@@ -95,7 +93,7 @@ export default function ItemCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Item(modelFields));
+          await DataStore.save(new RawMaterials(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -109,7 +107,7 @@ export default function ItemCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, "ItemCreateForm")}
+      {...getOverrideProps(overrides, "RawMaterialsCreateForm")}
     >
       <TextField
         label="Barcode"
@@ -120,8 +118,8 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode: value,
-              Name,
-              Manufcturer,
+              Material,
+              Mass,
               Carbon,
             };
             const result = onChange(modelFields);
@@ -138,7 +136,7 @@ export default function ItemCreateForm(props) {
         {...getOverrideProps(overrides, "Barcode")}
       ></TextField>
       <TextField
-        label="Name"
+        label="Material"
         isRequired={false}
         isReadOnly={false}
         onChange={(e) => {
@@ -146,25 +144,25 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Name: value,
-              Manufcturer,
+              Material: value,
+              Mass,
               Carbon,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.Material ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.Material?.hasError) {
+            runValidationTasks("Material", value);
           }
-          setName(value);
+          setMaterial(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
+        onBlur={() => runValidationTasks("Material", Material)}
+        errorMessage={errors.Material?.errorMessage}
+        hasError={errors.Material?.hasError}
+        {...getOverrideProps(overrides, "Material")}
       ></TextField>
       <TextField
-        label="Manufcturer"
+        label="Mass"
         isRequired={false}
         isReadOnly={false}
         onChange={(e) => {
@@ -172,22 +170,22 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Name,
-              Manufcturer: value,
+              Material,
+              Mass: value,
               Carbon,
             };
             const result = onChange(modelFields);
-            value = result?.Manufcturer ?? value;
+            value = result?.Mass ?? value;
           }
-          if (errors.Manufcturer?.hasError) {
-            runValidationTasks("Manufcturer", value);
+          if (errors.Mass?.hasError) {
+            runValidationTasks("Mass", value);
           }
-          setManufcturer(value);
+          setMass(value);
         }}
-        onBlur={() => runValidationTasks("Manufcturer", Manufcturer)}
-        errorMessage={errors.Manufcturer?.errorMessage}
-        hasError={errors.Manufcturer?.hasError}
-        {...getOverrideProps(overrides, "Manufcturer")}
+        onBlur={() => runValidationTasks("Mass", Mass)}
+        errorMessage={errors.Mass?.errorMessage}
+        hasError={errors.Mass?.hasError}
+        {...getOverrideProps(overrides, "Mass")}
       ></TextField>
       <TextField
         label="Carbon"
@@ -198,8 +196,8 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Name,
-              Manufcturer,
+              Material,
+              Mass,
               Carbon: value,
             };
             const result = onChange(modelFields);

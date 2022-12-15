@@ -7,13 +7,14 @@
 /* eslint-disable */
 import * as React from "react";
 import { fetchByPath, validateField } from "./utils";
-import { Item } from "../models";
+import { Products } from "../models";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
-export default function ItemCreateForm(props) {
+export default function ProductsUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id,
+    products,
     onSuccess,
     onError,
     onSubmit,
@@ -26,27 +27,37 @@ export default function ItemCreateForm(props) {
   const initialValues = {
     Barcode: undefined,
     Name: undefined,
-    Manufcturer: undefined,
+    Manufacturer: undefined,
     Carbon: undefined,
   };
   const [Barcode, setBarcode] = React.useState(initialValues.Barcode);
   const [Name, setName] = React.useState(initialValues.Name);
-  const [Manufcturer, setManufcturer] = React.useState(
-    initialValues.Manufcturer
+  const [Manufacturer, setManufacturer] = React.useState(
+    initialValues.Manufacturer
   );
   const [Carbon, setCarbon] = React.useState(initialValues.Carbon);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setBarcode(initialValues.Barcode);
-    setName(initialValues.Name);
-    setManufcturer(initialValues.Manufcturer);
-    setCarbon(initialValues.Carbon);
+    const cleanValues = { ...initialValues, ...productsRecord };
+    setBarcode(cleanValues.Barcode);
+    setName(cleanValues.Name);
+    setManufacturer(cleanValues.Manufacturer);
+    setCarbon(cleanValues.Carbon);
     setErrors({});
   };
+  const [productsRecord, setProductsRecord] = React.useState(products);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = id ? await DataStore.query(Products, id) : products;
+      setProductsRecord(record);
+    };
+    queryData();
+  }, [id, products]);
+  React.useEffect(resetStateValues, [productsRecord]);
   const validations = {
     Barcode: [],
     Name: [],
-    Manufcturer: [],
+    Manufacturer: [],
     Carbon: [],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -69,7 +80,7 @@ export default function ItemCreateForm(props) {
         let modelFields = {
           Barcode,
           Name,
-          Manufcturer,
+          Manufacturer,
           Carbon,
         };
         const validationResponses = await Promise.all(
@@ -95,12 +106,13 @@ export default function ItemCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Item(modelFields));
+          await DataStore.save(
+            Products.copyOf(productsRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -109,19 +121,20 @@ export default function ItemCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, "ItemCreateForm")}
+      {...getOverrideProps(overrides, "ProductsUpdateForm")}
     >
       <TextField
         label="Barcode"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={Barcode}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Barcode: value,
               Name,
-              Manufcturer,
+              Manufacturer,
               Carbon,
             };
             const result = onChange(modelFields);
@@ -141,13 +154,14 @@ export default function ItemCreateForm(props) {
         label="Name"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={Name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Barcode,
               Name: value,
-              Manufcturer,
+              Manufacturer,
               Carbon,
             };
             const result = onChange(modelFields);
@@ -164,42 +178,44 @@ export default function ItemCreateForm(props) {
         {...getOverrideProps(overrides, "Name")}
       ></TextField>
       <TextField
-        label="Manufcturer"
+        label="Manufacturer"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={Manufacturer}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Barcode,
               Name,
-              Manufcturer: value,
+              Manufacturer: value,
               Carbon,
             };
             const result = onChange(modelFields);
-            value = result?.Manufcturer ?? value;
+            value = result?.Manufacturer ?? value;
           }
-          if (errors.Manufcturer?.hasError) {
-            runValidationTasks("Manufcturer", value);
+          if (errors.Manufacturer?.hasError) {
+            runValidationTasks("Manufacturer", value);
           }
-          setManufcturer(value);
+          setManufacturer(value);
         }}
-        onBlur={() => runValidationTasks("Manufcturer", Manufcturer)}
-        errorMessage={errors.Manufcturer?.errorMessage}
-        hasError={errors.Manufcturer?.hasError}
-        {...getOverrideProps(overrides, "Manufcturer")}
+        onBlur={() => runValidationTasks("Manufacturer", Manufacturer)}
+        errorMessage={errors.Manufacturer?.errorMessage}
+        hasError={errors.Manufacturer?.hasError}
+        {...getOverrideProps(overrides, "Manufacturer")}
       ></TextField>
       <TextField
         label="Carbon"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={Carbon}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Barcode,
               Name,
-              Manufcturer,
+              Manufacturer,
               Carbon: value,
             };
             const result = onChange(modelFields);
@@ -220,10 +236,10 @@ export default function ItemCreateForm(props) {
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Clear"
+          children="Reset"
           type="reset"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, "ClearButton")}
+          {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
           gap="15px"

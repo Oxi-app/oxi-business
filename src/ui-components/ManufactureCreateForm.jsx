@@ -7,11 +7,11 @@
 /* eslint-disable */
 import * as React from "react";
 import { fetchByPath, validateField } from "./utils";
-import { Item } from "../models";
+import { Manufacture } from "../models";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
-export default function ItemCreateForm(props) {
+export default function ManufactureCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -25,29 +25,15 @@ export default function ItemCreateForm(props) {
   } = props;
   const initialValues = {
     Barcode: undefined,
-    Name: undefined,
-    Manufcturer: undefined,
-    Carbon: undefined,
   };
   const [Barcode, setBarcode] = React.useState(initialValues.Barcode);
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Manufcturer, setManufcturer] = React.useState(
-    initialValues.Manufcturer
-  );
-  const [Carbon, setCarbon] = React.useState(initialValues.Carbon);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setBarcode(initialValues.Barcode);
-    setName(initialValues.Name);
-    setManufcturer(initialValues.Manufcturer);
-    setCarbon(initialValues.Carbon);
     setErrors({});
   };
   const validations = {
     Barcode: [],
-    Name: [],
-    Manufcturer: [],
-    Carbon: [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -68,9 +54,6 @@ export default function ItemCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           Barcode,
-          Name,
-          Manufcturer,
-          Carbon,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -95,7 +78,7 @@ export default function ItemCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Item(modelFields));
+          await DataStore.save(new Manufacture(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -109,7 +92,7 @@ export default function ItemCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, "ItemCreateForm")}
+      {...getOverrideProps(overrides, "ManufactureCreateForm")}
     >
       <TextField
         label="Barcode"
@@ -120,9 +103,6 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode: value,
-              Name,
-              Manufcturer,
-              Carbon,
             };
             const result = onChange(modelFields);
             value = result?.Barcode ?? value;
@@ -136,84 +116,6 @@ export default function ItemCreateForm(props) {
         errorMessage={errors.Barcode?.errorMessage}
         hasError={errors.Barcode?.hasError}
         {...getOverrideProps(overrides, "Barcode")}
-      ></TextField>
-      <TextField
-        label="Name"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Name: value,
-              Manufcturer,
-              Carbon,
-            };
-            const result = onChange(modelFields);
-            value = result?.Name ?? value;
-          }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
-          }
-          setName(value);
-        }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
-      ></TextField>
-      <TextField
-        label="Manufcturer"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Name,
-              Manufcturer: value,
-              Carbon,
-            };
-            const result = onChange(modelFields);
-            value = result?.Manufcturer ?? value;
-          }
-          if (errors.Manufcturer?.hasError) {
-            runValidationTasks("Manufcturer", value);
-          }
-          setManufcturer(value);
-        }}
-        onBlur={() => runValidationTasks("Manufcturer", Manufcturer)}
-        errorMessage={errors.Manufcturer?.errorMessage}
-        hasError={errors.Manufcturer?.hasError}
-        {...getOverrideProps(overrides, "Manufcturer")}
-      ></TextField>
-      <TextField
-        label="Carbon"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Name,
-              Manufcturer,
-              Carbon: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.Carbon ?? value;
-          }
-          if (errors.Carbon?.hasError) {
-            runValidationTasks("Carbon", value);
-          }
-          setCarbon(value);
-        }}
-        onBlur={() => runValidationTasks("Carbon", Carbon)}
-        errorMessage={errors.Carbon?.errorMessage}
-        hasError={errors.Carbon?.hasError}
-        {...getOverrideProps(overrides, "Carbon")}
       ></TextField>
       <Flex
         justifyContent="space-between"

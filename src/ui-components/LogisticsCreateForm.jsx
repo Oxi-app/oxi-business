@@ -7,11 +7,11 @@
 /* eslint-disable */
 import * as React from "react";
 import { fetchByPath, validateField } from "./utils";
-import { Item } from "../models";
+import { Logistics } from "../models";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
-export default function ItemCreateForm(props) {
+export default function LogisticsCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -25,28 +25,30 @@ export default function ItemCreateForm(props) {
   } = props;
   const initialValues = {
     Barcode: undefined,
-    Name: undefined,
-    Manufcturer: undefined,
+    Location: undefined,
+    Distance: undefined,
+    Mode: undefined,
     Carbon: undefined,
   };
   const [Barcode, setBarcode] = React.useState(initialValues.Barcode);
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Manufcturer, setManufcturer] = React.useState(
-    initialValues.Manufcturer
-  );
+  const [Location, setLocation] = React.useState(initialValues.Location);
+  const [Distance, setDistance] = React.useState(initialValues.Distance);
+  const [Mode, setMode] = React.useState(initialValues.Mode);
   const [Carbon, setCarbon] = React.useState(initialValues.Carbon);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setBarcode(initialValues.Barcode);
-    setName(initialValues.Name);
-    setManufcturer(initialValues.Manufcturer);
+    setLocation(initialValues.Location);
+    setDistance(initialValues.Distance);
+    setMode(initialValues.Mode);
     setCarbon(initialValues.Carbon);
     setErrors({});
   };
   const validations = {
     Barcode: [],
-    Name: [],
-    Manufcturer: [],
+    Location: [],
+    Distance: [],
+    Mode: [],
     Carbon: [],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -68,8 +70,9 @@ export default function ItemCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           Barcode,
-          Name,
-          Manufcturer,
+          Location,
+          Distance,
+          Mode,
           Carbon,
         };
         const validationResponses = await Promise.all(
@@ -95,7 +98,7 @@ export default function ItemCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Item(modelFields));
+          await DataStore.save(new Logistics(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -109,7 +112,7 @@ export default function ItemCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, "ItemCreateForm")}
+      {...getOverrideProps(overrides, "LogisticsCreateForm")}
     >
       <TextField
         label="Barcode"
@@ -120,8 +123,9 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode: value,
-              Name,
-              Manufcturer,
+              Location,
+              Distance,
+              Mode,
               Carbon,
             };
             const result = onChange(modelFields);
@@ -138,7 +142,7 @@ export default function ItemCreateForm(props) {
         {...getOverrideProps(overrides, "Barcode")}
       ></TextField>
       <TextField
-        label="Name"
+        label="Location"
         isRequired={false}
         isReadOnly={false}
         onChange={(e) => {
@@ -146,25 +150,26 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Name: value,
-              Manufcturer,
+              Location: value,
+              Distance,
+              Mode,
               Carbon,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.Location ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.Location?.hasError) {
+            runValidationTasks("Location", value);
           }
-          setName(value);
+          setLocation(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
+        onBlur={() => runValidationTasks("Location", Location)}
+        errorMessage={errors.Location?.errorMessage}
+        hasError={errors.Location?.hasError}
+        {...getOverrideProps(overrides, "Location")}
       ></TextField>
       <TextField
-        label="Manufcturer"
+        label="Distance"
         isRequired={false}
         isReadOnly={false}
         onChange={(e) => {
@@ -172,22 +177,50 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Name,
-              Manufcturer: value,
+              Location,
+              Distance: value,
+              Mode,
               Carbon,
             };
             const result = onChange(modelFields);
-            value = result?.Manufcturer ?? value;
+            value = result?.Distance ?? value;
           }
-          if (errors.Manufcturer?.hasError) {
-            runValidationTasks("Manufcturer", value);
+          if (errors.Distance?.hasError) {
+            runValidationTasks("Distance", value);
           }
-          setManufcturer(value);
+          setDistance(value);
         }}
-        onBlur={() => runValidationTasks("Manufcturer", Manufcturer)}
-        errorMessage={errors.Manufcturer?.errorMessage}
-        hasError={errors.Manufcturer?.hasError}
-        {...getOverrideProps(overrides, "Manufcturer")}
+        onBlur={() => runValidationTasks("Distance", Distance)}
+        errorMessage={errors.Distance?.errorMessage}
+        hasError={errors.Distance?.hasError}
+        {...getOverrideProps(overrides, "Distance")}
+      ></TextField>
+      <TextField
+        label="Mode"
+        isRequired={false}
+        isReadOnly={false}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Barcode,
+              Location,
+              Distance,
+              Mode: value,
+              Carbon,
+            };
+            const result = onChange(modelFields);
+            value = result?.Mode ?? value;
+          }
+          if (errors.Mode?.hasError) {
+            runValidationTasks("Mode", value);
+          }
+          setMode(value);
+        }}
+        onBlur={() => runValidationTasks("Mode", Mode)}
+        errorMessage={errors.Mode?.errorMessage}
+        hasError={errors.Mode?.hasError}
+        {...getOverrideProps(overrides, "Mode")}
       ></TextField>
       <TextField
         label="Carbon"
@@ -198,8 +231,9 @@ export default function ItemCreateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Name,
-              Manufcturer,
+              Location,
+              Distance,
+              Mode,
               Carbon: value,
             };
             const result = onChange(modelFields);

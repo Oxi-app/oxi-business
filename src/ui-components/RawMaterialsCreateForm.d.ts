@@ -5,7 +5,6 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Item } from "../models";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type ValidationResponse = {
@@ -13,36 +12,35 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type ItemUpdateFormInputValues = {
+export declare type RawMaterialsCreateFormInputValues = {
     Barcode?: string;
-    Name?: string;
-    Manufcturer?: string;
+    Material?: string;
+    Mass?: string;
     Carbon?: string;
 };
-export declare type ItemUpdateFormValidationValues = {
+export declare type RawMaterialsCreateFormValidationValues = {
     Barcode?: ValidationFunction<string>;
-    Name?: ValidationFunction<string>;
-    Manufcturer?: ValidationFunction<string>;
+    Material?: ValidationFunction<string>;
+    Mass?: ValidationFunction<string>;
     Carbon?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type ItemUpdateFormOverridesProps = {
-    ItemUpdateFormGrid?: FormProps<GridProps>;
+export declare type RawMaterialsCreateFormOverridesProps = {
+    RawMaterialsCreateFormGrid?: FormProps<GridProps>;
     Barcode?: FormProps<TextFieldProps>;
-    Name?: FormProps<TextFieldProps>;
-    Manufcturer?: FormProps<TextFieldProps>;
+    Material?: FormProps<TextFieldProps>;
+    Mass?: FormProps<TextFieldProps>;
     Carbon?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type ItemUpdateFormProps = React.PropsWithChildren<{
-    overrides?: ItemUpdateFormOverridesProps | undefined | null;
+export declare type RawMaterialsCreateFormProps = React.PropsWithChildren<{
+    overrides?: RawMaterialsCreateFormOverridesProps | undefined | null;
 } & {
-    id?: string;
-    item?: Item;
-    onSubmit?: (fields: ItemUpdateFormInputValues) => ItemUpdateFormInputValues;
-    onSuccess?: (fields: ItemUpdateFormInputValues) => void;
-    onError?: (fields: ItemUpdateFormInputValues, errorMessage: string) => void;
+    clearOnSuccess?: boolean;
+    onSubmit?: (fields: RawMaterialsCreateFormInputValues) => RawMaterialsCreateFormInputValues;
+    onSuccess?: (fields: RawMaterialsCreateFormInputValues) => void;
+    onError?: (fields: RawMaterialsCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: ItemUpdateFormInputValues) => ItemUpdateFormInputValues;
-    onValidate?: ItemUpdateFormValidationValues;
+    onChange?: (fields: RawMaterialsCreateFormInputValues) => RawMaterialsCreateFormInputValues;
+    onValidate?: RawMaterialsCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function ItemUpdateForm(props: ItemUpdateFormProps): React.ReactElement;
+export default function RawMaterialsCreateForm(props: RawMaterialsCreateFormProps): React.ReactElement;

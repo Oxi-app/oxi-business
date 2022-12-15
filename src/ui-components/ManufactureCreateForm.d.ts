@@ -12,35 +12,26 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type ItemCreateFormInputValues = {
+export declare type ManufactureCreateFormInputValues = {
     Barcode?: string;
-    Name?: string;
-    Manufcturer?: string;
-    Carbon?: string;
 };
-export declare type ItemCreateFormValidationValues = {
+export declare type ManufactureCreateFormValidationValues = {
     Barcode?: ValidationFunction<string>;
-    Name?: ValidationFunction<string>;
-    Manufcturer?: ValidationFunction<string>;
-    Carbon?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type ItemCreateFormOverridesProps = {
-    ItemCreateFormGrid?: FormProps<GridProps>;
+export declare type ManufactureCreateFormOverridesProps = {
+    ManufactureCreateFormGrid?: FormProps<GridProps>;
     Barcode?: FormProps<TextFieldProps>;
-    Name?: FormProps<TextFieldProps>;
-    Manufcturer?: FormProps<TextFieldProps>;
-    Carbon?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type ItemCreateFormProps = React.PropsWithChildren<{
-    overrides?: ItemCreateFormOverridesProps | undefined | null;
+export declare type ManufactureCreateFormProps = React.PropsWithChildren<{
+    overrides?: ManufactureCreateFormOverridesProps | undefined | null;
 } & {
     clearOnSuccess?: boolean;
-    onSubmit?: (fields: ItemCreateFormInputValues) => ItemCreateFormInputValues;
-    onSuccess?: (fields: ItemCreateFormInputValues) => void;
-    onError?: (fields: ItemCreateFormInputValues, errorMessage: string) => void;
+    onSubmit?: (fields: ManufactureCreateFormInputValues) => ManufactureCreateFormInputValues;
+    onSuccess?: (fields: ManufactureCreateFormInputValues) => void;
+    onError?: (fields: ManufactureCreateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: ItemCreateFormInputValues) => ItemCreateFormInputValues;
-    onValidate?: ItemCreateFormValidationValues;
+    onChange?: (fields: ManufactureCreateFormInputValues) => ManufactureCreateFormInputValues;
+    onValidate?: ManufactureCreateFormValidationValues;
 } & React.CSSProperties>;
-export default function ItemCreateForm(props: ItemCreateFormProps): React.ReactElement;
+export default function ManufactureCreateForm(props: ManufactureCreateFormProps): React.ReactElement;

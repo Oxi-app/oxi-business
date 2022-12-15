@@ -7,13 +7,14 @@
 /* eslint-disable */
 import * as React from "react";
 import { fetchByPath, validateField } from "./utils";
-import { Item } from "../models";
+import { Transport } from "../models";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { DataStore } from "aws-amplify";
-export default function ItemCreateForm(props) {
+export default function TransportUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id,
+    transport,
     onSuccess,
     onError,
     onSubmit,
@@ -24,30 +25,30 @@ export default function ItemCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    Barcode: undefined,
-    Name: undefined,
-    Manufcturer: undefined,
-    Carbon: undefined,
+    Mode: undefined,
+    CO2perMile: undefined,
   };
-  const [Barcode, setBarcode] = React.useState(initialValues.Barcode);
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Manufcturer, setManufcturer] = React.useState(
-    initialValues.Manufcturer
-  );
-  const [Carbon, setCarbon] = React.useState(initialValues.Carbon);
+  const [Mode, setMode] = React.useState(initialValues.Mode);
+  const [CO2perMile, setCO2perMile] = React.useState(initialValues.CO2perMile);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setBarcode(initialValues.Barcode);
-    setName(initialValues.Name);
-    setManufcturer(initialValues.Manufcturer);
-    setCarbon(initialValues.Carbon);
+    const cleanValues = { ...initialValues, ...transportRecord };
+    setMode(cleanValues.Mode);
+    setCO2perMile(cleanValues.CO2perMile);
     setErrors({});
   };
+  const [transportRecord, setTransportRecord] = React.useState(transport);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = id ? await DataStore.query(Transport, id) : transport;
+      setTransportRecord(record);
+    };
+    queryData();
+  }, [id, transport]);
+  React.useEffect(resetStateValues, [transportRecord]);
   const validations = {
-    Barcode: [],
-    Name: [],
-    Manufcturer: [],
-    Carbon: [],
+    Mode: [],
+    CO2perMile: [],
   };
   const runValidationTasks = async (fieldName, value) => {
     let validationResponse = validateField(value, validations[fieldName]);
@@ -67,10 +68,8 @@ export default function ItemCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Barcode,
-          Name,
-          Manufcturer,
-          Carbon,
+          Mode,
+          CO2perMile,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -95,12 +94,13 @@ export default function ItemCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
-          await DataStore.save(new Item(modelFields));
+          await DataStore.save(
+            Transport.copyOf(transportRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -109,121 +109,67 @@ export default function ItemCreateForm(props) {
         }
       }}
       {...rest}
-      {...getOverrideProps(overrides, "ItemCreateForm")}
+      {...getOverrideProps(overrides, "TransportUpdateForm")}
     >
       <TextField
-        label="Barcode"
+        label="Mode"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={Mode}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Barcode: value,
-              Name,
-              Manufcturer,
-              Carbon,
+              Mode: value,
+              CO2perMile,
             };
             const result = onChange(modelFields);
-            value = result?.Barcode ?? value;
+            value = result?.Mode ?? value;
           }
-          if (errors.Barcode?.hasError) {
-            runValidationTasks("Barcode", value);
+          if (errors.Mode?.hasError) {
+            runValidationTasks("Mode", value);
           }
-          setBarcode(value);
+          setMode(value);
         }}
-        onBlur={() => runValidationTasks("Barcode", Barcode)}
-        errorMessage={errors.Barcode?.errorMessage}
-        hasError={errors.Barcode?.hasError}
-        {...getOverrideProps(overrides, "Barcode")}
+        onBlur={() => runValidationTasks("Mode", Mode)}
+        errorMessage={errors.Mode?.errorMessage}
+        hasError={errors.Mode?.hasError}
+        {...getOverrideProps(overrides, "Mode")}
       ></TextField>
       <TextField
-        label="Name"
+        label="Co2per mile"
         isRequired={false}
         isReadOnly={false}
+        defaultValue={CO2perMile}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Barcode,
-              Name: value,
-              Manufcturer,
-              Carbon,
+              Mode,
+              CO2perMile: value,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.CO2perMile ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.CO2perMile?.hasError) {
+            runValidationTasks("CO2perMile", value);
           }
-          setName(value);
+          setCO2perMile(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
-      ></TextField>
-      <TextField
-        label="Manufcturer"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Name,
-              Manufcturer: value,
-              Carbon,
-            };
-            const result = onChange(modelFields);
-            value = result?.Manufcturer ?? value;
-          }
-          if (errors.Manufcturer?.hasError) {
-            runValidationTasks("Manufcturer", value);
-          }
-          setManufcturer(value);
-        }}
-        onBlur={() => runValidationTasks("Manufcturer", Manufcturer)}
-        errorMessage={errors.Manufcturer?.errorMessage}
-        hasError={errors.Manufcturer?.hasError}
-        {...getOverrideProps(overrides, "Manufcturer")}
-      ></TextField>
-      <TextField
-        label="Carbon"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Name,
-              Manufcturer,
-              Carbon: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.Carbon ?? value;
-          }
-          if (errors.Carbon?.hasError) {
-            runValidationTasks("Carbon", value);
-          }
-          setCarbon(value);
-        }}
-        onBlur={() => runValidationTasks("Carbon", Carbon)}
-        errorMessage={errors.Carbon?.errorMessage}
-        hasError={errors.Carbon?.hasError}
-        {...getOverrideProps(overrides, "Carbon")}
+        onBlur={() => runValidationTasks("CO2perMile", CO2perMile)}
+        errorMessage={errors.CO2perMile?.errorMessage}
+        hasError={errors.CO2perMile?.hasError}
+        {...getOverrideProps(overrides, "CO2perMile")}
       ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Clear"
+          children="Reset"
           type="reset"
           onClick={resetStateValues}
-          {...getOverrideProps(overrides, "ClearButton")}
+          {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
           gap="15px"

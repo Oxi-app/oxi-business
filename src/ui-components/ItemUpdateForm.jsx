@@ -26,29 +26,22 @@ export default function ItemUpdateForm(props) {
   } = props;
   const initialValues = {
     Barcode: undefined,
-    Merchant: undefined,
     Name: undefined,
-    Price: undefined,
-    Weight: undefined,
-    Material: undefined,
+    Manufcturer: undefined,
     Carbon: undefined,
   };
   const [Barcode, setBarcode] = React.useState(initialValues.Barcode);
-  const [Merchant, setMerchant] = React.useState(initialValues.Merchant);
   const [Name, setName] = React.useState(initialValues.Name);
-  const [Price, setPrice] = React.useState(initialValues.Price);
-  const [Weight, setWeight] = React.useState(initialValues.Weight);
-  const [Material, setMaterial] = React.useState(initialValues.Material);
+  const [Manufcturer, setManufcturer] = React.useState(
+    initialValues.Manufcturer
+  );
   const [Carbon, setCarbon] = React.useState(initialValues.Carbon);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = { ...initialValues, ...itemRecord };
     setBarcode(cleanValues.Barcode);
-    setMerchant(cleanValues.Merchant);
     setName(cleanValues.Name);
-    setPrice(cleanValues.Price);
-    setWeight(cleanValues.Weight);
-    setMaterial(cleanValues.Material);
+    setManufcturer(cleanValues.Manufcturer);
     setCarbon(cleanValues.Carbon);
     setErrors({});
   };
@@ -63,11 +56,8 @@ export default function ItemUpdateForm(props) {
   React.useEffect(resetStateValues, [itemRecord]);
   const validations = {
     Barcode: [],
-    Merchant: [],
     Name: [],
-    Price: [],
-    Weight: [],
-    Material: [],
+    Manufcturer: [],
     Carbon: [],
   };
   const runValidationTasks = async (fieldName, value) => {
@@ -89,11 +79,8 @@ export default function ItemUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           Barcode,
-          Merchant,
           Name,
-          Price,
-          Weight,
-          Material,
+          Manufcturer,
           Carbon,
         };
         const validationResponses = await Promise.all(
@@ -146,11 +133,8 @@ export default function ItemUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode: value,
-              Merchant,
               Name,
-              Price,
-              Weight,
-              Material,
+              Manufcturer,
               Carbon,
             };
             const result = onChange(modelFields);
@@ -167,36 +151,6 @@ export default function ItemUpdateForm(props) {
         {...getOverrideProps(overrides, "Barcode")}
       ></TextField>
       <TextField
-        label="Merchant"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={Merchant}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Merchant: value,
-              Name,
-              Price,
-              Weight,
-              Material,
-              Carbon,
-            };
-            const result = onChange(modelFields);
-            value = result?.Merchant ?? value;
-          }
-          if (errors.Merchant?.hasError) {
-            runValidationTasks("Merchant", value);
-          }
-          setMerchant(value);
-        }}
-        onBlur={() => runValidationTasks("Merchant", Merchant)}
-        errorMessage={errors.Merchant?.errorMessage}
-        hasError={errors.Merchant?.hasError}
-        {...getOverrideProps(overrides, "Merchant")}
-      ></TextField>
-      <TextField
         label="Name"
         isRequired={false}
         isReadOnly={false}
@@ -206,11 +160,8 @@ export default function ItemUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Merchant,
               Name: value,
-              Price,
-              Weight,
-              Material,
+              Manufcturer,
               Carbon,
             };
             const result = onChange(modelFields);
@@ -227,94 +178,31 @@ export default function ItemUpdateForm(props) {
         {...getOverrideProps(overrides, "Name")}
       ></TextField>
       <TextField
-        label="Price"
+        label="Manufcturer"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={Price}
+        defaultValue={Manufcturer}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               Barcode,
-              Merchant,
               Name,
-              Price: value,
-              Weight,
-              Material,
+              Manufcturer: value,
               Carbon,
             };
             const result = onChange(modelFields);
-            value = result?.Price ?? value;
+            value = result?.Manufcturer ?? value;
           }
-          if (errors.Price?.hasError) {
-            runValidationTasks("Price", value);
+          if (errors.Manufcturer?.hasError) {
+            runValidationTasks("Manufcturer", value);
           }
-          setPrice(value);
+          setManufcturer(value);
         }}
-        onBlur={() => runValidationTasks("Price", Price)}
-        errorMessage={errors.Price?.errorMessage}
-        hasError={errors.Price?.hasError}
-        {...getOverrideProps(overrides, "Price")}
-      ></TextField>
-      <TextField
-        label="Weight"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={Weight}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Merchant,
-              Name,
-              Price,
-              Weight: value,
-              Material,
-              Carbon,
-            };
-            const result = onChange(modelFields);
-            value = result?.Weight ?? value;
-          }
-          if (errors.Weight?.hasError) {
-            runValidationTasks("Weight", value);
-          }
-          setWeight(value);
-        }}
-        onBlur={() => runValidationTasks("Weight", Weight)}
-        errorMessage={errors.Weight?.errorMessage}
-        hasError={errors.Weight?.hasError}
-        {...getOverrideProps(overrides, "Weight")}
-      ></TextField>
-      <TextField
-        label="Material"
-        isRequired={false}
-        isReadOnly={false}
-        defaultValue={Material}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Barcode,
-              Merchant,
-              Name,
-              Price,
-              Weight,
-              Material: value,
-              Carbon,
-            };
-            const result = onChange(modelFields);
-            value = result?.Material ?? value;
-          }
-          if (errors.Material?.hasError) {
-            runValidationTasks("Material", value);
-          }
-          setMaterial(value);
-        }}
-        onBlur={() => runValidationTasks("Material", Material)}
-        errorMessage={errors.Material?.errorMessage}
-        hasError={errors.Material?.hasError}
-        {...getOverrideProps(overrides, "Material")}
+        onBlur={() => runValidationTasks("Manufcturer", Manufcturer)}
+        errorMessage={errors.Manufcturer?.errorMessage}
+        hasError={errors.Manufcturer?.hasError}
+        {...getOverrideProps(overrides, "Manufcturer")}
       ></TextField>
       <TextField
         label="Carbon"
@@ -326,11 +214,8 @@ export default function ItemUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               Barcode,
-              Merchant,
               Name,
-              Price,
-              Weight,
-              Material,
+              Manufcturer,
               Carbon: value,
             };
             const result = onChange(modelFields);

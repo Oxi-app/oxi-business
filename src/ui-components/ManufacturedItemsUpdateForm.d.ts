@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Item } from "../models";
+import { ManufacturedItems } from "../models";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type ValidationResponse = {
@@ -13,36 +13,36 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type ItemUpdateFormInputValues = {
+export declare type ManufacturedItemsUpdateFormInputValues = {
     Barcode?: string;
     Name?: string;
-    Manufcturer?: string;
+    Manufacturer?: string;
     Carbon?: string;
 };
-export declare type ItemUpdateFormValidationValues = {
+export declare type ManufacturedItemsUpdateFormValidationValues = {
     Barcode?: ValidationFunction<string>;
     Name?: ValidationFunction<string>;
-    Manufcturer?: ValidationFunction<string>;
+    Manufacturer?: ValidationFunction<string>;
     Carbon?: ValidationFunction<string>;
 };
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type ItemUpdateFormOverridesProps = {
-    ItemUpdateFormGrid?: FormProps<GridProps>;
+export declare type ManufacturedItemsUpdateFormOverridesProps = {
+    ManufacturedItemsUpdateFormGrid?: FormProps<GridProps>;
     Barcode?: FormProps<TextFieldProps>;
     Name?: FormProps<TextFieldProps>;
-    Manufcturer?: FormProps<TextFieldProps>;
+    Manufacturer?: FormProps<TextFieldProps>;
     Carbon?: FormProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type ItemUpdateFormProps = React.PropsWithChildren<{
-    overrides?: ItemUpdateFormOverridesProps | undefined | null;
+export declare type ManufacturedItemsUpdateFormProps = React.PropsWithChildren<{
+    overrides?: ManufacturedItemsUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    item?: Item;
-    onSubmit?: (fields: ItemUpdateFormInputValues) => ItemUpdateFormInputValues;
-    onSuccess?: (fields: ItemUpdateFormInputValues) => void;
-    onError?: (fields: ItemUpdateFormInputValues, errorMessage: string) => void;
+    manufacturedItems?: ManufacturedItems;
+    onSubmit?: (fields: ManufacturedItemsUpdateFormInputValues) => ManufacturedItemsUpdateFormInputValues;
+    onSuccess?: (fields: ManufacturedItemsUpdateFormInputValues) => void;
+    onError?: (fields: ManufacturedItemsUpdateFormInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: ItemUpdateFormInputValues) => ItemUpdateFormInputValues;
-    onValidate?: ItemUpdateFormValidationValues;
+    onChange?: (fields: ManufacturedItemsUpdateFormInputValues) => ManufacturedItemsUpdateFormInputValues;
+    onValidate?: ManufacturedItemsUpdateFormValidationValues;
 } & React.CSSProperties>;
-export default function ItemUpdateForm(props: ItemUpdateFormProps): React.ReactElement;
+export default function ManufacturedItemsUpdateForm(props: ManufacturedItemsUpdateFormProps): React.ReactElement;
